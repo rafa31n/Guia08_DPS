@@ -32,16 +32,18 @@ const Pais = ({ resultado, resultado2 }) => {
         );
     });
     return (
-        <Card>
-            <Card.Title>{nombre}</Card.Title>
-            <Card.Divider />
-            <View style={{ justifyContent: 'center' }}>
-                <Text style={styles.text}>Capital: {capital}</Text>
-                <Text style={styles.text}>Region: {region}</Text>
-                <Text style={styles.text}>Lengua: {lengua.toString()}</Text>
-                <Text style={styles.text}>Área: {area}</Text>
-            </View>
-        </Card>
+        <View>
+            <Card>
+                <Card.Title>{nombre}</Card.Title>
+                <Card.Divider />
+                <View style={{ justifyContent: 'center' }}>
+                    <Text style={styles.text}>Capital: {capital}</Text>
+                    <Text style={styles.text}>Region: {region}</Text>
+                    <Text style={styles.text}>Lengua: {lengua.toString()}</Text>
+                    <Text style={styles.text}>Área: {area}</Text>
+                </View>
+            </Card>
+        </View>
     );
 };
 
@@ -51,6 +53,12 @@ const styles = StyleSheet.create({
     },
     bandera: {
         width: '100%'
+    },
+    banderaContainer: {
+        backgroundColor: '#fff',
+        width: '80%',
+        height: 150,
+        justifyContent: 'center'
     }
 });
 export default Pais;

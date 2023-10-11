@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { StyleSheet, Text, View, Alert, Image } from 'react-native';
 import Formulario from './src/components/Formulario';
 import Pais from './src/components/Pais';
 
@@ -11,23 +11,36 @@ export default function App() {
   const [consultar, guardarconsultar] = useState(false);
   const [resultado, guardarresultado] = useState({});
   const [resultado2, guardarresultado2] = useState({});
+
+  const [bandera, setBandera] = useState('')
+
   useEffect(() => {
     const { pais } = busqueda;
+    const urlBandera =
+      'https://flagcdn.com/w20/' + pais + '.png';
+    fetch(urlBandera, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((data) => {
+        console.log(data.url);
+        setBandera(data.url)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
     const consultarPais = async () => {
       if (consultar) {
         const url =
           `https://servicodados.ibge.gov.br/api/v1/paises/${pais}`;
-        const urlBandera =
-          `https://flagcdn.com/w20/${pais}.png`;
-        console.log(url)
-        console.log(urlBandera)
+
         try {
           const respuesta = await fetch(url);
-          const respuesta2 = await fetch(urlBandera);
           const resultado = await respuesta.json();
-          const resultado2 = await respuesta2.json();
           guardarresultado(resultado);
-          guardarresultado2(resultado2);
           guardarconsultar(false);
         } catch (error) {
           mostrarAlerta();
@@ -36,6 +49,7 @@ export default function App() {
     };
     consultarPais();
   }, [consultar]);
+
   const mostrarAlerta = () => {
     Alert.alert('Error', 'No hay resultado intenta con otra ciudad o país'),
       [{ Text: 'Ok' }];
@@ -49,7 +63,14 @@ export default function App() {
           guardarbusqueda={guardarbusqueda}
           guardarconsultar={guardarconsultar}
         />
-        <Pais resultado={resultado} resultado2={resultado2}/>
+        <Pais resultado={resultado} resultado2={resultado2} />
+        <View style={styles.contenedorBandera}>
+          <Image
+            source={{
+              uri: bandera,
+            }}
+            style={styles.bandera} />
+        </View>
       </View>
     </View>
   );
@@ -63,6 +84,16 @@ const styles = StyleSheet.create({
   contenido: {
     margin: '2.5%',
   },
+  contenedorBandera:{   
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin:25,
+  },
+  bandera: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+  }
 });
 
 
